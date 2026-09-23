@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Letter Sound Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAFCFF; --surface:#EDF2F9; --ink:#1E2B45; --muted:#56647E;
+  --rule:#6F98D6; --rule-soft:#AFC5E8; --line:#D3DDEC;
+  --good:#2B7F52; --slow:#9A6A00; --bad:#B9433A; --on:#FFFFFF;
+  --new:#E4E9F1; --learn:#FCE9B8; --known:#CDEBD8;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#121826; --surface:#1B2334; --ink:#E6EBF4; --muted:#9FAAC0;
+    --rule:#5F82BC; --rule-soft:#34496E; --line:#2A3550;
+    --good:#3E9E6B; --slow:#B98A1E; --bad:#C85A4F; --on:#FFFFFF;
+    --new:#263047; --learn:#4A3F1E; --known:#1F4232;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#121826; --surface:#1B2334; --ink:#E6EBF4; --muted:#9FAAC0;
+  --rule:#5F82BC; --rule-soft:#34496E; --line:#2A3550;
+  --good:#3E9E6B; --slow:#B98A1E; --bad:#C85A4F; --on:#FFFFFF;
+  --new:#263047; --learn:#4A3F1E; --known:#1F4232;
+  color-scheme: dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0;background:var(--paper);color:var(--ink)}
+body{font-family:Andika,"Segoe UI",system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;border-radius:10px;padding:.6em 1em;background:var(--surface)}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--rule);outline-offset:2px}
+.wrap{max-width:900px;margin:0 auto;padding:16px 20px 48px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 0 14px;border-bottom:2px solid var(--rule-soft);margin-bottom:22px}
+.bar h1{font-size:1.35rem;margin:0;font-weight:700}
+.bar-r{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+select,input,textarea{background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:.45em .6em}
+.ghost{background:transparent;border:1.5px solid var(--line)}
+.primary{background:var(--ink);color:var(--paper);font-weight:700}
+.secondary{background:var(--surface);border:1.5px solid var(--rule-soft);font-weight:700}
+.big{font-size:1.15rem;padding:.85em 1.4em}
+h2{font-size:2rem;margin:0 0 2px;line-height:1.2}
+h3{font-size:1.15rem;margin:34px 0 6px}
+.sub,.hint{color:var(--muted);margin:0 0 12px}
+.hint{font-size:.95rem}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.grid{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-width:58px;padding:6px 8px 4px;border-radius:10px;border:1.5px solid transparent;display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.chip .g{font-size:1.7rem}
+.chip .d{font-size:.72rem;color:var(--muted);min-height:1em}
+.s-new{background:var(--new)}
+.s-learning{background:var(--learn)}
+.s-known{background:var(--known)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:-2px}
+.legend .l-new::before{background:var(--new)} .legend .l-learning::before{background:var(--learn)} .legend .l-known::before{background:var(--known)}
+.chartbox{overflow-x:auto;background:var(--surface);border-radius:12px;padding:10px}
+.chartbox svg{display:block;min-width:520px;width:100%;height:auto}
+.why{margin-top:36px;border-top:2px solid var(--rule-soft);padding-top:12px}
+.why summary{font-weight:700;cursor:pointer}
+.why p{max-width:68ch}
+.empty{background:var(--surface);border-radius:12px;padding:22px}
+.addrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+/* practice */
+.stage{display:flex;flex-direction:column;align-items:center;gap:18px}
+.card{width:min(560px,100%);background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:6px 10px}
+.card svg{display:block;width:100%;height:auto}
+.card.fixing{border-color:var(--bad)}
+.r-top,.r-base{stroke:var(--rule);stroke-width:2.5}
+.r-mid{stroke:var(--rule);stroke-width:2;stroke-dasharray:10 8;opacity:.8}
+.glyph{fill:var(--ink);font-family:Andika,"Segoe UI",system-ui,sans-serif}
+.resp{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:min(560px,100%)}
+.resp.two{grid-template-columns:repeat(2,1fr)}
+.resp button{min-height:84px;font-size:1.25rem;font-weight:700;color:var(--on);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.r-c{background:var(--good)} .r-s{background:var(--slow)} .r-e{background:var(--bad)}
+kbd{font-family:inherit;font-size:.72rem;opacity:.8;font-weight:400}
+.count{color:var(--muted)}
+.fix{width:min(560px,100%);background:var(--surface);border-radius:14px;padding:16px 18px}
+.fix p{margin:0 0 8px}
+.timer{font-size:2.4rem;font-weight:700;font-variant-numeric:tabular-nums}
+table{border-collapse:collapse;width:100%}
+.tbl{overflow-x:auto}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+td.g{font-size:1.5rem}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:.9rem}
+.t-c{background:var(--known)} .t-s{background:var(--learn)} .t-e{background:#F3D3CF;color:#6B1F18}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .t-e{background:#5A2A26;color:#F6D6D2}}
+:root[data-theme="dark"] .t-e{background:#5A2A26;color:#F6D6D2}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:16px;max-width:520px}
+.field label{font-weight:700}
+.field textarea{min-height:80px}
+.danger{background:transparent;border:1.5px solid var(--bad);color:var(--bad)}
+.result{font-size:1.4rem;margin:8px 0 16px}
+@media (max-width:520px){h2{font-size:1.6rem}.resp button{min-height:72px;font-size:1.1rem}}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+(function(){
+const KEY='letter-sound-practice-v1';
+const OLD_DEFAULT='a b c d e f g h i j k l m n o p q r s t u v w x y z';
+const DEF={sequence:'s a t i p n m e r o d c h b l f g u w k j v y z q x',workingSet:3,trials:24,masteryDays:3,aim:60};
+const SOUND={a:'/ă/ (short a)',e:'/ĕ/ (short e)',i:'/ĭ/ (short i)',o:'/ŏ/ (short o)',u:'/ŭ/ (short u)',c:'/k/',q:'/kw/',x:'/ks/',y:'/y/ as in yes',sh:'/sh/',ch:'/ch/',th:'/th/',wh:'/w/',ck:'/k/',ng:'/ng/',qu:'/kw/'};
+function soundOf(t){const k=t.toLowerCase();if(SOUND[k])return SOUND[k];if(/^[a-z]$/.test(k))return '/'+k+'/';return null}
+
+let D=null;
+try{const r=localStorage.getItem(KEY);if(r)D=JSON.parse(r)}catch(e){}
+if(!D||typeof D!=='object')D={};
+D.settings=Object.assign({},DEF,D.settings||{});
+if(D.settings.sequence===OLD_DEFAULT)D.settings.sequence=DEF.sequence;
+D.students=Array.isArray(D.students)?D.students:[];
+if(!D.students.find(s=>s.id===D.active))D.active=D.students[0]?D.students[0].id:null;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}}
+
+const app=document.getElementById('app');
+const $=s=>document.querySelector(s);
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function uid(){return Math.random().toString(36).slice(2,10)}
+function seq(){return D.settings.sequence.split(/[\s,]+/).filter(Boolean).filter((t,i,a)=>a.indexOf(t)===i)}
+function stu(){return D.students.find(s=>s.id===D.active)||null}
+function ensure(st){st.letters=st.letters||{};st.timings=st.timings||[];for(const t of seq())if(!st.letters[t])st.letters[t]={status:'new',days:[],last:''}}
+
+let view='home',session=null,timing=null,summary=null,adding=false,delArm=false,tick=null;
+
+/* lined letter card */
+let MET={asc:.74,x:.52};
+function measure(){try{const c=document.createElement('canvas').getContext('2d');c.font='100px Andika';const a=c.measureText('l').actualBoundingBoxAscent,x=c.measureText('x').actualBoundingBoxAscent;if(a>0&&x>0)MET={asc:a/100,x:x/100}}catch(e){}}
+function cardSVG(tok){
+  const fs=tok.length===1?200:tok.length===2?160:125;
+  const base=228,top=base-MET.asc*fs,mid=base-MET.x*fs;
+  return `<svg viewBox="0 0 400 290" role="img" aria-label="${esc(tok)}">
+  <line class="r-top" x1="14" x2="386" y1="${top}" y2="${top}"/>
+  <line class="r-mid" x1="14" x2="386" y1="${mid}" y2="${mid}"/>
+  <line class="r-base" x1="14" x2="386" y1="${base}" y2="${base}"/>
+  <text class="glyph" x="200" y="${base}" text-anchor="middle" font-size="${fs}">${esc(tok)}</text></svg>`;
+}
+
+/* chart: semi-log, Precision Teaching style */
+function chart(ts,aim){
+  const list=ts.slice(-20),n=list.length,W=640,H=270,pl=46,pr=18,pt=14,pb=38;
+  const lo=Math.log10(.5),hi=Math.log10(200);
+  const y=v=>pt+(1-(Math.log10(Math.max(v,.5))-lo)/(hi-lo))*(H-pt-pb);
+  const x=i=>n===1?(pl+(W-pl-pr)/2):pl+i*(W-pl-pr)/(n-1);
+  let g='';
+  for(const v of [1,2,5,10,20,50,100,200]){g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${pl-8}" y="${y(v)+4}" text-anchor="end" font-size="12" fill="var(--muted)">${v}</text>`}
+  g+=`<text x="${pl-8}" y="${y(.5)+4}" text-anchor="end" font-size="12" fill="var(--muted)">0</text>`;
+  g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(aim)}" y2="${y(aim)}" stroke="var(--good)" stroke-width="2" stroke-dasharray="7 6"/><text x="${W-pr}" y="${y(aim)-6}" text-anchor="end" font-size="12" fill="var(--good)">aim ${aim}</text>`;
+  const step=Math.ceil(n/8);
+  list.forEach((t,i)=>{if(i%step===0||i===n-1){const p=t.date.split('-');g+=`<text x="${x(i)}" y="${H-12}" text-anchor="middle" font-size="12" fill="var(--muted)">${+p[1]}/${+p[2]}</text>`}});
+  if(n>1)g+=`<polyline fill="none" stroke="var(--ink)" stroke-width="2" points="${list.map((t,i)=>x(i)+','+y(t.correct)).join(' ')}"/>`;
+  list.forEach((t,i)=>{g+=`<circle cx="${x(i)}" cy="${y(t.correct)}" r="5" fill="var(--ink)"/>`;const ey=y(t.errors),ex=x(i);g+=`<path d="M${ex-5},${ey-5}L${ex+5},${ey+5}M${ex+5},${ey-5}L${ex-5},${ey+5}" stroke="var(--bad)" stroke-width="2.5"/>`});
+  return `<div class="chartbox"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Timings chart: correct and errors per minute">${g}</svg></div>
+  <p class="hint" style="margin-top:8px">Dots are correct per minute, X marks are errors per minute. The scale is logarithmic, as on a Standard Celeration Chart. Last ${n} timing${n===1?'':'s'} shown.</p>`;
+}
+
+/* ---------- views ---------- */
+function render(){
+  if(tick&&!(view==='timing'&&timing&&timing.state==='running')){clearInterval(tick);tick=null}
+  if(view==='home')home();else if(view==='practice')practice();else if(view==='summary')sumView();else if(view==='timing')timingView();else if(view==='settings')settingsView();
+}
+
+function header(){
+  const opts=D.students.map(s=>`<option value="${s.id}" ${s.id===D.active?'selected':''}>${esc(s.name)}</option>`).join('');
+  return `<header class="bar"><h1>Letter sound practice</h1><div class="bar-r">
+  ${D.students.length?`<label class="hint" style="margin:0" for="stuSel">Student</label><select id="stuSel">${opts}</select>`:''}
+  <button class="ghost" data-a="add">Add student</button><button class="ghost" data-a="settings">Settings</button></div></header>
+  ${adding?`<div class="addrow" style="margin:-8px 0 20px"><input id="newName" placeholder="Student name or initials" autocomplete="off"><button class="primary" data-a="addSave">Add</button><button class="ghost" data-a="addCancel">Cancel</button></div>`:''}`;
+}
+
+function home(){
+  const st=stu();
+  if(!st){app.innerHTML=header()+`<div class="empty"><h2>Add a student to start</h2><p class="sub">Each student keeps their own letter progress and timings on this device.</p><div class="addrow"><input id="firstName" placeholder="Student name or initials" autocomplete="off"><button class="primary" data-a="addFirst">Add student</button></div></div>`+whyBlock();const f=$('#firstName');if(f)f.focus();return}
+  ensure(st);
+  const s=seq(),N=D.settings.masteryDays;
+  const cnt={new:0,learning:0,known:0};s.forEach(t=>cnt[st.letters[t].status]++);
+  const chips=s.map(t=>{const L=st.letters[t];const d=L.status==='learning'?`${L.days.length}/${N} days`:'';return `<button class="chip s-${L.status}" data-chip="${esc(t)}" aria-label="${esc(t)}, ${L.status}${d?', '+d:''}"><span class="g">${esc(t)}</span><span class="d">${d}</span></button>`}).join('');
+  app.innerHTML=header()+`
+  <section><h2>${esc(st.name)}</h2><p class="sub">${cnt.known} known, ${cnt.learning} learning, ${cnt.new} not started</p>
+  <div class="actions"><button class="primary big" data-a="startP">Start practice</button><button class="secondary big" data-a="startT">One-minute timing</button></div></section>
+  <section><h3>Letters</h3><p class="hint">Tap a letter to change its status, for example to mark sounds a student already knows before the first session.</p>
+  <div class="grid">${chips}</div>
+  <div class="legend"><span class="l-new">Not started</span><span class="l-learning">Learning (practice days toward mastery)</span><span class="l-known">Known (in review)</span></div></section>
+  <section><h3>Timings</h3>${st.timings.length?chart(st.timings,D.settings.aim):'<p class="hint">No timings yet. Run a one-minute timing to start the chart.</p>'}</section>`+whyBlock();
+  if(adding){const f=$('#newName');if(f)f.focus()}
+}
+
+function whyBlock(){const S=D.settings;return `<details class="why"><summary>How the practice is set up</summary>
+<p>Each session works on a small set of letters (${S.workingSet} at a time) and mixes them with letters the student already knows. The student recalls each sound from memory rather than repeating after you, which is retrieval practice. Mixing known letters in keeps the success rate high, as in incremental rehearsal.</p>
+<p>A learning letter comes back after a short gap, and the gap grows each time the student gets it right. Letters are interleaved, so the student has to tell them apart instead of repeating one sound in a row.</p>
+<p>When the student makes an error, the app shows a model, lead, test correction. The letter then returns after one other card so the student gets another try soon.</p>
+<p>A letter moves to known after the first try of the day is correct on ${S.masteryDays} practice days in a row. A slow answer neither counts nor resets. An error on the first try resets the count. Requiring success across separate days checks retention, not just same-session memory. Known letters keep appearing in review, and a review error moves the letter back to learning.</p>
+<p>The one-minute timing counts correct and incorrect sounds per minute, following Precision Teaching. Accuracy alone does not show whether a sound is automatic, so the timing tracks speed as well.</p></details>`}
+
+/* ---------- practice session ---------- */
+function buildSession(st){
+  ensure(st);
+  const s=seq(),size=D.settings.workingSet;
+  const learning=s.filter(t=>st.letters[t].status==='learning');
+  for(const t of s){if(learning.length>=size)break;if(st.letters[t].status==='new'){st.letters[t].status='learning';st.letters[t].days=[];learning.push(t)}}
+  const targets=learning.slice(0,Math.max(size,Math.min(learning.length,size+2)));
+  const known=s.filter(t=>st.letters[t].status==='known').sort((a,b)=>(st.letters[a].last||'').localeCompare(st.letters[b].last||'')).slice(0,10);
+  save();
+  return {items:targets.map((t,i)=>({t,kind:'target',due:i*2,gap:1,shown:0})),review:known.map(t=>({t,kind:'review',shown:0})),trial:0,total:D.settings.trials,last:null,first:{},seen:{},mode:'card',current:null};
+}
+function nextCard(S){
+  const t=S.trial;
+  const due=S.items.filter(i=>i.due<=t&&i.t!==S.last).sort((a,b)=>a.due-b.due);
+  if(due.length)return due[0];
+  const rev=S.review.filter(r=>r.t!==S.last).sort((a,b)=>a.shown-b.shown);
+  if(rev.length){const m=rev[0].shown,c=rev.filter(r=>r.shown===m);return c[Math.floor(Math.random()*c.length)]}
+  const any=S.items.filter(i=>i.t!==S.last).sort((a,b)=>a.due-b.due);
+  if(any.length)return any[0];
+  return S.items[0]||S.review[0]||null;
+}
+function startPractice(){
+  const st=stu();if(!st)return;
+  session=buildSession(st);
+  if(!session.items.length&&!session.review.length){alertMsg('There are no letters to practice. Check the letter list in Settings.');return}
+  view='practice';advance();
+}
+function advance(){
+  const S=session;
+  if(S.trial>=S.total){finish();return}
+  S.current=nextCard(S);S.last=S.current.t;S.mode='card';render();
+}
+function respond(r){
+  const S=session,it=S.current,st=stu();if(!it||S.mode!=='card')return;
+  const L=st.letters[it.t];
+  if(!(it.t in S.first))S.first[it.t]=r;
+  S.seen[it.t]=(S.seen[it.t]||0)+1;
+  L.last=today();it.shown++;
+  if(it.kind==='review'){
+    if(r==='e'){L.status='learning';L.days=[];S.review=S.review.filter(x=>x!==it);S.items.push({t:it.t,kind:'target',due:S.trial+2,gap:1,shown:1})}
+  }else{
+    if(r==='c')it.gap=Math.min(it.gap*2,8);else if(r==='e')it.gap=1;
+    it.due=S.trial+1+it.gap;
+  }
+  S.trial++;
+  if(r==='e'){S.mode='fix';render();return}
+  advance();
+}
+function finish(){
+  const S=session,st=stu(),d=today(),N=D.settings.masteryDays,newly=[];
+  for(const [t,r] of Object.entries(S.first)){
+    const L=st.letters[t];if(!L||L.status!=='learning')continue;
+    if(r==='c'){if(!L.days.includes(d))L.days.push(d)}
+    else if(r==='e'){L.days=[]}
+    if(L.days.length>=N){L.status='known';newly.push(t)}
+  }
+  save();
+  summary={first:S.first,seen:S.seen,newly,trials:S.trial};
+  session=null;view='summary';render();
+}
+function practice(){
+  const S=session,st=stu(),tok=S.current.t;
+  const top=`<header class="bar"><h1>${esc(st.name)}</h1><div class="bar-r"><span class="count">Card ${Math.min(S.trial+1,S.total)} of ${S.total}</span><button class="ghost" data-a="endP">End session</button></div></header>`;
+  let lower;
+  if(S.mode==='card'){
+    lower=`<div class="resp"><button class="r-c" data-r="c">Correct<kbd>key 1</kbd></button><button class="r-s" data-r="s">Slow<kbd>key 2</kbd></button><button class="r-e" data-r="e">Error<kbd>key 3</kbd></button></div>
+    <p class="hint" style="text-align:center;max-width:560px">Point to the letter and ask for the sound. Mark Slow when the answer is right but comes after a noticeable pause.</p>`;
+  }else{
+    const snd=soundOf(tok);
+    lower=`<div class="fix"><p><b>Model.</b> Point and say: ${snd?`“This says ${esc(snd)}.”`:`the sound for “${esc(tok)}”.`}</p><p><b>Lead.</b> Say the sound together.</p><p><b>Test.</b> Ask, “What sound?” The student says it alone.</p>
+    <button class="primary big" data-a="fixDone" style="margin-top:6px">Continue <kbd>Enter</kbd></button><p class="hint" style="margin-top:10px">This letter comes back after the next card.</p></div>`;
+  }
+  app.innerHTML=top+`<main class="stage"><div class="card ${S.mode==='fix'?'fixing':''}">${cardSVG(tok)}</div>${lower}</main>`;
+}
+function sumView(){
+  const st=stu(),s=summary,N=D.settings.masteryDays,lab={c:'Correct',s:'Slow',e:'Error'};
+  const order=seq().filter(t=>t in s.first);
+  const rows=order.map(t=>{const L=st.letters[t],r=s.first[t];const status=L.status==='known'?(s.newly.includes(t)?'Now known':'Known'):L.status==='learning'?`Learning, ${L.days.length}/${N} days`:'Not started';return `<tr><td class="g">${esc(t)}</td><td><span class="tag t-${r}">${lab[r]}</span></td><td>${s.seen[t]}</td><td>${status}</td></tr>`}).join('');
+  app.innerHTML=`<header class="bar"><h1>Session done</h1><div class="bar-r"><button class="primary" data-a="home">Back to ${esc(st.name)}</button></div></header>
+  <p class="result">${s.trials} cards practiced.${s.newly.length?` Moved to known: ${s.newly.map(esc).join(', ')}.`:''}</p>
+  <div class="tbl"><table><thead><tr><th>Letter</th><th>First try</th><th>Times shown</th><th>Status now</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <p class="hint" style="margin-top:12px">Only the first try each session counts toward mastery. Later tries in the session are practice.</p>`;
+}
+
+/* ---------- timing ---------- */
+function startTimingView(){
+  const st=stu();if(!st)return;ensure(st);
+  let pool=seq().filter(t=>st.letters[t].status!=='new'),all=false;
+  if(!pool.length){pool=seq();all=true}
+  timing={state:'ready',pool,all,correct:0,errors:0,cur:null,last:null,end:0};
+  view='timing';render();
+}
+function tNext(){const p=timing.pool;let c;do{c=p[Math.floor(Math.random()*p.length)]}while(p.length>1&&c===timing.last);timing.cur=c;timing.last=c}
+function tStart(){timing.state='running';timing.end=Date.now()+60000;tNext();render();
+  tick=setInterval(()=>{const left=Math.max(0,Math.ceil((timing.end-Date.now())/1000));const el=$('#timer');if(el)el.textContent='0:'+String(left).padStart(2,'0');if(left<=0){clearInterval(tick);tick=null;timing.state='done';render()}},200)}
+function tTap(r){if(timing.state!=='running')return;if(r==='c')timing.correct++;else timing.errors++;tNext();
+  const c=$('#tcard');if(c)c.innerHTML=cardSVG(timing.cur)}
+function timingView(){
+  const st=stu(),T=timing;
+  const top=`<header class="bar"><h1>One-minute timing: ${esc(st.name)}</h1><div class="bar-r"><button class="ghost" data-a="home">${T.state==='running'?'Stop':'Back'}</button></div></header>`;
+  if(T.state==='ready'){
+    app.innerHTML=top+`<p style="max-width:62ch">Letters appear one at a time in random order. Tap Correct or Error as soon as the student answers, then the next letter appears. The timer runs for 60 seconds once you press Start.</p>
+    <p class="hint">${T.all?'This student has no letters in learning or known yet, so the timing uses the full letter list.':`Uses the ${T.pool.length} letters this student is learning or knows.`}</p>
+    <button class="primary big" data-a="tStart">Start</button>`;
+  }else if(T.state==='running'){
+    app.innerHTML=top+`<main class="stage"><div class="timer" id="timer" aria-live="off">1:00</div><div class="card" id="tcard">${cardSVG(T.cur)}</div>
+    <div class="resp two"><button class="r-c" data-t="c">Correct<kbd>key 1</kbd></button><button class="r-e" data-t="e">Error<kbd>key 3</kbd></button></div></main>`;
+  }else{
+    app.innerHTML=top+`<p class="result">${T.correct} correct and ${T.errors} error${T.errors===1?'':'s'} in one minute.</p>
+    <div class="actions"><button class="primary big" data-a="tSave">Save timing</button><button class="ghost big" data-a="home">Don't save</button></div>`;
+  }
+}
+
+/* ---------- settings ---------- */
+function settingsView(){
+  const S=D.settings,st=stu();
+  app.innerHTML=`<header class="bar"><h1>Settings</h1><div class="bar-r"><button class="ghost" data-a="home">Back</button></div></header>
+  <div class="field"><label for="fSeq">Letters, in teaching order</label><textarea id="fSeq">${esc(S.sequence)}</textarea><span class="hint">Separate with spaces. New letters are introduced in this order. Paste your school's sequence here. Digraphs such as sh or ch work too.</span></div>
+  <div class="field"><label for="fWs">Letters in the working set</label><input id="fWs" type="number" min="1" max="5" value="${S.workingSet}"><span class="hint">How many unknown letters are practiced at once.</span></div>
+  <div class="field"><label for="fTr">Cards per session</label><input id="fTr" type="number" min="8" max="60" value="${S.trials}"></div>
+  <div class="field"><label for="fMd">Practice days in a row for mastery</label><input id="fMd" type="number" min="1" max="7" value="${S.masteryDays}"></div>
+  <div class="field"><label for="fAim">Timing aim (correct per minute)</label><input id="fAim" type="number" min="5" max="200" value="${S.aim}"><span class="hint">Shown as a line on the chart. Set this to the aim your program uses.</span></div>
+  <button class="primary" data-a="setSave">Save settings</button>
+  ${st?`<h3>Student</h3><div class="field"><label for="fName">Name</label><input id="fName" value="${esc(st.name)}"></div>
+  <div class="actions"><button class="secondary" data-a="rename">Save name</button><button class="danger" data-a="del">${delArm?`Tap again to delete ${esc(st.name)}`:`Delete ${esc(st.name)}`}</button></div>`:''}
+  <p class="hint" style="margin-top:28px">Data is saved in this browser on this device only. Clearing browser data removes it.</p>`;
+}
+
+function alertMsg(m){const p=document.createElement('p');p.className='hint';p.style.color='var(--bad)';p.textContent=m;app.prepend(p)}
+function addStudent(name){name=(name||'').trim();if(!name)return;const s={id:uid(),name,letters:{},timings:[]};ensure(s);D.students.push(s);D.active=s.id;adding=false;save();render()}
+function num(id,lo,hi,dflt){const v=parseInt($(id).value,10);return isNaN(v)?dflt:Math.min(hi,Math.max(lo,v))}
+
+app.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.r){respond(b.dataset.r);return}
+  if(b.dataset.t){tTap(b.dataset.t);return}
+  if(b.dataset.chip){const st=stu(),L=st.letters[b.dataset.chip];const nx={new:'learning',learning:'known',known:'new'}[L.status];L.status=nx;L.days=[];save();render();return}
+  const a=b.dataset.a;
+  if(a!=='del')delArm=false;
+  switch(a){
+    case 'add':adding=true;view='home';render();break;
+    case 'addCancel':adding=false;render();break;
+    case 'addSave':addStudent($('#newName').value);break;
+    case 'addFirst':addStudent($('#firstName').value);break;
+    case 'settings':view='settings';render();break;
+    case 'home':view='home';timing=null;render();break;
+    case 'startP':startPractice();break;
+    case 'endP':if(session.trial>0)finish();else{session=null;view='home';render()}break;
+    case 'fixDone':advance();break;
+    case 'startT':startTimingView();break;
+    case 'tStart':tStart();break;
+    case 'tSave':{const st=stu();st.timings.push({date:today(),correct:timing.correct,errors:timing.errors});save();timing=null;view='home';render();break}
+    case 'setSave':{const S=D.settings;const sq=$('#fSeq').value.trim();if(sq)S.sequence=sq;S.workingSet=num('#fWs',1,5,S.workingSet);S.trials=num('#fTr',8,60,S.trials);S.masteryDays=num('#fMd',1,7,S.masteryDays);S.aim=num('#fAim',5,200,S.aim);D.students.forEach(ensure);save();view='home';render();break}
+    case 'rename':{const n=$('#fName').value.trim();if(n){stu().name=n;save()}view='home';render();break}
+    case 'del':if(!delArm){delArm=true;render()}else{D.students=D.students.filter(s=>s.id!==D.active);D.active=D.students[0]?D.students[0].id:null;delArm=false;save();view='home';render()}break;
+  }
+});
+app.addEventListener('change',e=>{if(e.target.id==='stuSel'){D.active=e.target.value;save();render()}});
+app.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.target.id==='newName'||e.target.id==='firstName')){addStudent(e.target.value)}});
+document.addEventListener('keydown',e=>{
+  if(e.target.matches&&e.target.matches('input,textarea,select'))return;
+  if(view==='practice'&&session){
+    if(session.mode==='card'){if(e.key==='1')respond('c');else if(e.key==='2')respond('s');else if(e.key==='3')respond('e')}
+    else if(e.key==='Enter'||e.key===' '){e.preventDefault();advance()}
+  }else if(view==='timing'&&timing&&timing.state==='running'){if(e.key==='1')tTap('c');else if(e.key==='3')tTap('e')}
+});
+
+render();
+if(document.fonts&&document.fonts.load){document.fonts.load('100px Andika').then(()=>{measure();if(view==='practice'||view==='timing')render()}).catch(()=>{})}
+})();
+</script>
+</body>
+</html>
